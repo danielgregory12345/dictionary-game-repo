@@ -1,0 +1,211 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@import url(
+        https://fonts.googleapis.com/css?family=Playfair+Display);
+        @import url(
+        https://fonts.googleapis.com/css?family=Open+Sans);
+        #content {
+            
+          text-align: center;
+          padding: 30px;
+          margin: 0px auto;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .details {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        
+        img {
+          border-radius: 5px;
+          box-shadow: black;
+        }
+        
+        .child{
+            /*float: left;*/
+            margin: 10px;
+            text-align: left;
+        }
+
+        #head{
+            display: flex;
+            width: fit-content;
+            height: fit-content;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+            align-items: baseline;
+            font-family: 'Playfair Display';
+            font-variant: normal;
+            
+        }
+        #targetHead{
+            display: flex;
+            width: fit-content;
+            height: fit-content;
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+            align-items: baseline;
+            font-family: 'Playfair Display';
+            font-variant: normal;
+            
+        }
+        #line{
+            border-color: #D71920;
+        }
+        #def{
+            width : 60%;
+            margin: auto;
+            font-family: 'Open Sans';
+            color: inherit;
+            
+        }
+        #part-of-speech{
+            color: #004990;
+        }
+
+        #minutes{
+            color: #004990;
+            font-size: larger;
+        }
+        #colon{
+            color: #004990;
+            font-size: larger;
+        }
+        #seconds{
+            color: #004990;
+            font-size: larger;
+        }
+        #count{
+            color: #004990;
+            font-size: larger;
+        }
+        #part-of-speech:hover{
+            color: #D71920;
+        }
+
+        #logo{
+            margin-top: 30px;
+            display: flex;
+            width: fit-content;
+            height: fit-content;
+            
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Playfair Display';
+            font-variant: normal;
+        }
+        #darkButton {
+            position: absolute;
+            left: 10%;
+        }
+        button { 
+            font-family: inherit;
+            font-size: inherit;
+            border: none;
+            background: none;
+            padding-left: 0;
+            color: inherit;
+            
+        }
+        button:hover{
+           
+            color: #D71920;
+        }
+        .dark-mode {
+            background-color: rgb(13, 13, 13);
+            color: rgb(234, 234, 234);
+        }
+        .popup-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.8); /* Dark transparent overlay */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+
+        /* Centered Popup Card */
+        .popup-card {
+          background: white;
+          width: 90%;
+          max-width: 400px;
+          padding: 30px;
+          border-radius: 15px;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+          animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* Button Styling */
+        .popup-card button {
+          margin-top: 20px;
+          padding: 12px 20px;
+          border: none;
+          background: #28a745;
+          color: white;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: bold;
+          transition: background 0.2s;
+        }
+
+        .popup-card button:hover {
+          background: #218838;
+        }
+
+        /* Fade-in Animation */
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @media only screen and (max-width: 600px) {
+            #def {
+                width: 95%;
+                padding: 0%;
+                
+            }
+            #def1 {
+                padding: auto;
+            }
+            #def2 {
+                padding: auto;
+
+            }
+            #def3 {
+                padding: auto;
+
+            }
+            
+        }
