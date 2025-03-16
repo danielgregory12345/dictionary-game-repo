@@ -10,7 +10,7 @@ function App() {
 
   // State variables to store word and def
   const [word, setWord] = useState('');
-  const [clicks, setClicks] = useState(-2);
+  const [clicks, setClicks] = useState(-1);
   const [partOfSpeech, setpartOfSpeech] = useState('');
   const [targetWord, setTargetWord] = useState('');
   const [targetWordBase, setTargetWordBase] = useState('');
@@ -19,7 +19,7 @@ function App() {
   const [minutesLabel, setMinutesLabel] = useState('00');
   const [secondsLabel, setSecondsLabel] = useState('00');
 
-
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const [definitions, setDefinitions] = useState([[], [], []]); // Array for def1, def2, def3
 
@@ -28,6 +28,8 @@ function App() {
   function darkMode() {
     var element = document.body;
     element.classList.toggle("dark-mode");
+    setIsDarkMode((prevMode) => !prevMode);
+
   }
   function hasLetters(inputString) {
     // Regular expression to check for letters
@@ -90,12 +92,13 @@ function App() {
 
     // Parsing it to JSON format
     const data = await response.json();
-
+    
+    setClicks(clicks => clicks + 1);
     if (trimNonAlphabetical(data[0].meta.id) === targetWord) {
       endGame();
       return;
     } // if the target word is reached
-    setClicks(clicks => clicks + 1);
+    
     setWord(trimNonAlphabetical(data[0].meta.id));
     setpartOfSpeech(data[0].fl)
 
@@ -149,19 +152,27 @@ function App() {
 
     // Call cleanup to stop the timer when the component is unmounted
     return () => clearInterval(timerInterval);
-  }, []);
+  }, [showPopup]);
   useEffect(() => {
-    
-    getRandomWord().then(randWord => {
-
-      setTargetWord(randWord)
-   
-  });
-
-
-  getWord("start");
-    
+    async function initializeGame() {
+      const randWord = await getRandomWord();
+      if (randWord) {
+        setTargetWord(randWord); // Update target word first
+        
+      }
+    }
+  
+    initializeGame();
   }, []);
+  
+  //waits for targetWord to update before fetching the first word
+  useEffect(() => {
+    if (targetWord) {
+      getWord("start");
+      
+    }
+  }, [targetWord]); // Runs only after targetWord is updated
+  
 
   return (
     <div className="App">
@@ -203,10 +214,14 @@ function App() {
             <label id="colon">:</label>
             <label id="seconds">{secondsLabel}</label>
           </div>
+          <div id ="darkButton">
+          
+          {isDarkMode ? 
+          <WordButton word={"Light"} onClick={() => { darkMode(); getWord("light"); }} /> : 
+          <WordButton word={"Dark"} onClick={() => { darkMode(); getWord("dark"); }} />}
+          </div>
         </div>
-        <div>
-          <button id="darkButton" onClick={() => darkMode()}>Dark/Light</button>
-        </div>
+        
       </div>
       {showPopup && (
         <div className="popup-overlay">
