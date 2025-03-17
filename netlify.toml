@@ -1,3 +1,6 @@
 [build]
   functions = "functions"
 
+[functions."test-scheduled-function"]
+    schedule = "* * * * *"
+
