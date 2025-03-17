@@ -1,0 +1,35 @@
+name: Netlify Redeploy with Cache Clear and Update Env Var
+
+on:
+  schedule:
+    - cron: "* * * * *"  # Runs once per minute 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Generate new word
+        id: generate_word
+        run: |
+          # Generate a random word or pick from a predefined list
+          WORDS=("apple" "banana" "cherry" "date" "elderberry" "fig" "grape" "honeydew")
+          RANDOM_WORD=${WORDS[$RANDOM % ${#WORDS[@]}]}
+          echo "Generated word: $RANDOM_WORD"
+          echo "::set-output name=new_word::$RANDOM_WORD"  # Output the word to the next steps
+
+      - name: Update Netlify environment variable
+        run: |
+          NEW_WORD="${{ steps.generate_word.outputs.new_word }}"
+          echo "Setting REACT_APP_TARGET_WORD to: $NEW_WORD"
+          curl -X POST -H "Authorization: Bearer ${{ secrets.NETLIFY_API_KEY }}" \
+            -d "{\"REACT_APP_TARGET_WORD\":\"$NEW_WORD\"}" \
+            https://api.netlify.com/api/v1/sites/${{ secrets.NETLIFY_SITE_ID }}/env
+
+      - name: Clear cache and redeploy to Netlify
+        run: |
+          curl -X POST -H "Authorization: Bearer ${{ secrets.NETLIFY_API_KEY }}" \
+            -d '{"clear_cache": true}' \
+            https://api.netlify.com/api/v1/sites/${{ secrets.NETLIFY_SITE_ID }}/deploys
