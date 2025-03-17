@@ -1,7 +1,3 @@
 [build]
   functions = "functions"
 
-[[functions]]
-  name = "generateWord"
-  schedule = "* * * * *"  # Runs at midnight UTC daily
-
