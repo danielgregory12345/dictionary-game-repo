@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 import { FaFacebook, FaTwitter, FaWhatsapp } from "react-icons/fa";
-import { fetchWord } from "./utils/fetchWord.js";
+
 import WordButton from "./WordButton";
 import logo from './1024px-Merriam-Webster_logo.png';
 
@@ -173,11 +173,10 @@ function App() {
   }, [showPopup]);
   useEffect(() => {
     async function initializeGame() {
-      const randWord = await fetchWord();
-      
-      if (randWord) {
+      const target = process.env.REACT_APP_TARGET_WORD
+      if (target) {
         //setTargetWord(randWord); // Update target word first
-        setTargetWord(randWord);
+        setTargetWord(target);
       }
     }
   
