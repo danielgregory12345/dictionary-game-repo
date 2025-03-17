@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 import { FaFacebook, FaTwitter, FaWhatsapp } from "react-icons/fa";
 
@@ -18,9 +18,6 @@ function App() {
   const [clicks, setClicks] = useState(-1);
   const [partOfSpeech, setpartOfSpeech] = useState('');
   const [targetWord, setTargetWord] = useState('');
-  const [targetWordBase, setTargetWordBase] = useState('');
-  const [count, setCount] = useState(0);
-  const [totalSeconds, setTotalSeconds] = useState(0);
   const [minutesLabel, setMinutesLabel] = useState('00');
   const [secondsLabel, setSecondsLabel] = useState('00');
 
@@ -30,13 +27,7 @@ function App() {
 
   const [showPopup, setShowPopup] = useState(false); // State for popup visibility
 
-  function saveWinDate() {
-    const today = new Date().toISOString().split("T")[0]; // Get today's date as YYYY-MM-DD
-    localStorage.setItem("lastWinDate", today);
-    localStorage.setItem("lastWinClicks", clicks);
-    localStorage.setItem("lastWinMinutes", minutesLabel);
-    localStorage.setItem("lastWinSeconds", secondsLabel);
-  }
+  
   
   function darkMode() {
     var element = document.body;
@@ -60,10 +51,15 @@ function App() {
 
       return trimmedString;
   }
-  function endGame() {
+  const endGame = useCallback(() => {
+    const saveWinDate = (() =>  {
+      const today = new Date().toISOString().split("T")[0]; // Get today's date as YYYY-MM-DD
+      localStorage.setItem("lastWinDate", today);
+    } )
+
     saveWinDate()
     setShowPopup(true); // Show the popup when the user wins
-  }
+  }, [])
 
   function closePopup() {
     setShowPopup(false);
@@ -75,27 +71,27 @@ function App() {
       const randomLetter = String.fromCharCode('A'.charCodeAt(0) + randomIndex);
       return randomLetter;
   }
-  async function getRandomWord() {
+  const getRandomWord = useCallback(async () => {
       try {
-  // Fetch a random word from Datamuse API
-  const response = await fetch('https://api.datamuse.com/words?sp='+getRandomLetter()+'*');
+      // Fetch a random word from Datamuse API
+      const response = await fetch('https://api.datamuse.com/words?sp='+getRandomLetter()+'*');
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-  const data = await response.json();
+      const data = await response.json();
 
-  // Extract and return the random word
-  return data[Math.floor(Math.random() * (data.length - 1))].word;
+      // Extract and return the random word
+      return data[Math.floor(Math.random() * (data.length - 1))].word;
 
-  } catch (error) {
-  console.error('Error fetching random word:', error);
-  return null;
-  } // get random word
-  }
+      } catch (error) {
+      console.error('Error fetching random word:', error);
+      return null;
+    } // get random word
+  }, [])
   
-  async function getWord(word) {
+  const getWord = useCallback(async (word) => {
       //word = trimNonAlphabetical(word);
 
     // Making an API call (request)
@@ -139,22 +135,19 @@ function App() {
     }
     
 
-  setCount(count + 1)
+  
   setClicks(clicks => clicks + 1);
-  }
+  }, [])
 
   useEffect(() => {
-    if (clicks > 0) { // Ensuring clicks is updated before checking
-      checkWinCondition();
+    if (clicks > 0) {
+      if (word === targetWord) {
+        clearInterval(timeRef.current);
+        endGame();
+      }
     }
-  }, [clicks]); // Runs only when clicks changes
+  }, [clicks, word, targetWord, endGame, timeRef]); // ✅ Include necessary dependencies
   
-  const checkWinCondition = () => {
-    if (word === targetWord) {
-      clearInterval(timeRef.current);
-      endGame();
-    }
-  };
 
 
   // Use useEffect to call the API when the component mounts
@@ -165,7 +158,7 @@ function App() {
     timeRef.current = setInterval(() => {
       if (!showPopup) {seconds++;}
       
-      setTotalSeconds(totalSeconds => totalSeconds + 1)
+      //setTotalSeconds(totalSeconds => totalSeconds + 1)
       if (seconds >= 60) {
         seconds = 0;
         minutes++;
@@ -177,7 +170,7 @@ function App() {
 
     // Call cleanup to stop the timer when the component is unmounted
     return () => clearInterval(timeRef.current);
-  }, []);
+  }, [showPopup]);
   useEffect(() => {
     async function initializeGame() {
       const randWord = await getRandomWord();
@@ -189,7 +182,7 @@ function App() {
     }
   
     initializeGame();
-  }, []);
+  }, [getRandomWord]);
   
   //waits for targetWord to update before fetching the first word
   useEffect(() => {
@@ -197,7 +190,7 @@ function App() {
       getWord("start");
       
     }
-  }, [targetWord]); // Runs only after targetWord is updated
+  }, [targetWord, getWord]); // Runs only after targetWord is updated
   
 
   return (
