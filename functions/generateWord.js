@@ -4,7 +4,7 @@ exports.handler = async () => {
   
     // Store the word in a static JSON file (or a database)
     const fs = require("fs");
-    const filePath = "./public/daily-word.json"; // Static file accessible by frontend
+    const filePath = "../public/daily-word.json"; // Static file accessible by frontend
   
     fs.writeFileSync(filePath, JSON.stringify({ word: randomWord }));
   
