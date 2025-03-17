@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 import { FaFacebook, FaTwitter, FaWhatsapp } from "react-icons/fa";
-
+import { fetchWord } from "./utils/fetchWord.js";
 import WordButton from "./WordButton";
 import logo from './1024px-Merriam-Webster_logo.png';
 
@@ -9,7 +9,7 @@ import './App.css';
 
 function App() {
   const api_url = "https://dictionaryapi.com/api/v3/references/collegiate/json/";
-  //const REACT_APP_API_KEY = "?key=277f50c5-43d2-45ae-9643-30de29c388f6";
+
   const timeRef = useRef(null);
   const url = window.location.href;
   const message = "Check this out!";
@@ -173,11 +173,11 @@ function App() {
   }, [showPopup]);
   useEffect(() => {
     async function initializeGame() {
-      const randWord = await getRandomWord();
+      const randWord = await fetchWord();
       
       if (randWord) {
         //setTargetWord(randWord); // Update target word first
-        setTargetWord("verb");
+        setTargetWord(randWord);
       }
     }
   
