@@ -9,7 +9,7 @@ import './App.css';
 
 function App() {
   const api_url = "https://dictionaryapi.com/api/v3/references/collegiate/json/";
-  const api_key = "?key=277f50c5-43d2-45ae-9643-30de29c388f6";
+  //const REACT_APP_API_KEY = "?key=277f50c5-43d2-45ae-9643-30de29c388f6";
   const timeRef = useRef(null);
   const url = window.location.href;
   const message = "Check this out!";
@@ -96,7 +96,7 @@ function App() {
 
     // Making an API call (request)
     // and getting the response back
-    const response = await fetch(api_url + word + api_key);
+    const response = await fetch(api_url + word + process.env.REACT_APP_API_KEY);
 
   
 
