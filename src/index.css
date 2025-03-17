@@ -41,6 +41,8 @@ code {
             text-align: left;
         }
 
+        
+
         #head{
             display: flex;
             width: fit-content;
@@ -151,6 +153,7 @@ code {
         /* Centered Popup Card */
         .popup-card {
           background: white;
+          color: black;
           width: 90%;
           max-width: 400px;
           padding: 30px;

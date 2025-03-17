@@ -1,4 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import { FaFacebook, FaTwitter, FaWhatsapp } from "react-icons/fa";
+
 import WordButton from "./WordButton";
 import logo from './1024px-Merriam-Webster_logo.png';
 
@@ -7,7 +10,9 @@ import './App.css';
 function App() {
   const api_url = "https://dictionaryapi.com/api/v3/references/collegiate/json/";
   const api_key = "?key=277f50c5-43d2-45ae-9643-30de29c388f6";
-
+  const timeRef = useRef(null);
+  const url = window.location.href;
+  const message = "Check this out!";
   // State variables to store word and def
   const [word, setWord] = useState('');
   const [clicks, setClicks] = useState(-1);
@@ -25,6 +30,14 @@ function App() {
 
   const [showPopup, setShowPopup] = useState(false); // State for popup visibility
 
+  function saveWinDate() {
+    const today = new Date().toISOString().split("T")[0]; // Get today's date as YYYY-MM-DD
+    localStorage.setItem("lastWinDate", today);
+    localStorage.setItem("lastWinClicks", clicks);
+    localStorage.setItem("lastWinMinutes", minutesLabel);
+    localStorage.setItem("lastWinSeconds", secondsLabel);
+  }
+  
   function darkMode() {
     var element = document.body;
     element.classList.toggle("dark-mode");
@@ -48,6 +61,7 @@ function App() {
       return trimmedString;
   }
   function endGame() {
+    saveWinDate()
     setShowPopup(true); // Show the popup when the user wins
   }
 
@@ -93,11 +107,8 @@ function App() {
     // Parsing it to JSON format
     const data = await response.json();
     
-    setClicks(clicks => clicks + 1);
-    if (trimNonAlphabetical(data[0].meta.id) === targetWord) {
-      endGame();
-      return;
-    } // if the target word is reached
+    
+    // if the target word is reached
     
     setWord(trimNonAlphabetical(data[0].meta.id));
     setpartOfSpeech(data[0].fl)
@@ -129,7 +140,21 @@ function App() {
     
 
   setCount(count + 1)
+  setClicks(clicks => clicks + 1);
   }
+
+  useEffect(() => {
+    if (clicks > 0) { // Ensuring clicks is updated before checking
+      checkWinCondition();
+    }
+  }, [clicks]); // Runs only when clicks changes
+  
+  const checkWinCondition = () => {
+    if (word === targetWord) {
+      clearInterval(timeRef.current);
+      endGame();
+    }
+  };
 
 
   // Use useEffect to call the API when the component mounts
@@ -137,7 +162,7 @@ function App() {
     let minutes = 0;
     let seconds = 0;
 
-    const timerInterval = setInterval(() => {
+    timeRef.current = setInterval(() => {
       if (!showPopup) {seconds++;}
       
       setTotalSeconds(totalSeconds => totalSeconds + 1)
@@ -151,14 +176,15 @@ function App() {
     }, 1000);
 
     // Call cleanup to stop the timer when the component is unmounted
-    return () => clearInterval(timerInterval);
-  }, [showPopup]);
+    return () => clearInterval(timeRef.current);
+  }, []);
   useEffect(() => {
     async function initializeGame() {
       const randWord = await getRandomWord();
+      
       if (randWord) {
-        setTargetWord(randWord); // Update target word first
-        
+        //setTargetWord(randWord); // Update target word first
+        setTargetWord("verb");
       }
     }
   
@@ -178,7 +204,7 @@ function App() {
     <div className="App">
       <div id="content">
         <div id="targetHead">
-          <h2 className="child">target:</h2>
+          <h2 className="child"><WordButton word={"target :"} onClick={() => getWord("target")} style={{ fontSize: "inherit", fontWeight: "inherit" }} /></h2>
           <h2 className="child" id="targetWord">{targetWord}</h2>
         </div>
         <div>
@@ -200,7 +226,7 @@ function App() {
 
         </div>
         <div id="logo">
-          <label id="count">Clicks: {clicks}</label>
+          <label id="count"><WordButton word={"Clicks:"} onClick={() => getWord("click")} style={{ fontSize: "inherit", fontWeight: "inherit" }} />{clicks}</label>
           <div id="logo-container">
             <img 
               src={logo}
@@ -228,6 +254,20 @@ function App() {
           <div className="popup-card">
             <h2>🎉 You Win! 🎉</h2>
             <p>Congratulations! You got to "{targetWord}" in {minutesLabel}:{secondsLabel} - using only {clicks} clicks.</p>
+            
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <FacebookShareButton url={url}>
+                <FaFacebook size={32} color="#1877F2" />
+              </FacebookShareButton>
+
+              <TwitterShareButton url={url} title={message}>
+                <FaTwitter size={32} color="#1DA1F2" />
+              </TwitterShareButton>
+
+              <WhatsappShareButton url={url} title={message}>
+                <FaWhatsapp size={32} color="#25D366" />
+              </WhatsappShareButton>
+            </div>
             <button onClick={closePopup}>Close</button>
           </div>
         </div>
