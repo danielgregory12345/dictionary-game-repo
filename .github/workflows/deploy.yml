@@ -2,7 +2,7 @@ name: Netlify Redeploy with Cache Clear and Update Env Var
 
 on:
   schedule:
-    - cron: "*/5 * * * *"  # Runs once per 5 minute 
+    - cron: "0 0 * * *"  # Runs once per day
   workflow_dispatch:
 
 jobs:
