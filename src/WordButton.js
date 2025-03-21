@@ -2,7 +2,7 @@ import React from "react";
 
 const WordButton = ({ word, onClick }) => {
   return (
-    <button 
+    <button className="word-button"
       style={{  margin: "2px", fontSize: "16px", cursor: "pointer" }} 
       onClick={() => onClick(word)}
     >

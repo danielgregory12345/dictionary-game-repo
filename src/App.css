@@ -28,6 +28,37 @@
   color: #61dafb;
 }
 
+.nav-button {
+  background-color: #004990;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-button:hover {
+  
+  transform: scale(1.05); /* Slight growth effect */
+}
+
+.nav-button:active {
+ 
+  transform: scale(0.95);
+}
+
+.nav-button:focus {
+  outline: 3px solid rgba(0, 123, 255, 0.5); /* Light blue focus outline */
+}
+word-button:hover{
+           
+  color: #D71920;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

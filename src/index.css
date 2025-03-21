@@ -129,10 +129,11 @@ code {
             color: inherit;
             
         }
-        button:hover{
+        .word-button:hover{
            
             color: #D71920;
         }
+        
         .dark-mode {
             background-color: rgb(13, 13, 13);
             color: rgb(234, 234, 234);

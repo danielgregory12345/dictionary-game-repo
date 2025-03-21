@@ -1,0 +1,11 @@
+[build]
+  functions = "functions"   # Directory where your Netlify functions are stored
+  publish = "build"         # Where your frontend build files are located (React default)
+
+[functions]
+  node_bundler = "esbuild"  # Optimizes function bundling for better performance
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
