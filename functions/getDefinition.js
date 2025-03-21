@@ -26,7 +26,8 @@ exports.handler = async (event) => {
 
     // Return the API response
     return {
-      statusCode: 200
+      statusCode: 200,
+      body: data
     };
 
   } catch (error) {
