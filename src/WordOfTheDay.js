@@ -9,7 +9,7 @@ import logo from './1024px-Merriam-Webster_logo.png';
 import './App.css';
 
 function WordOfTheDay() {
-  //const api_url = "https://dictionaryapi.com/api/v3/references/collegiate/json/";
+  const api_url = "https://dictionaryapi.com/api/v3/references/collegiate/json/";
 
   const timeRef = useRef(null);
   const url = window.location.href;
@@ -97,8 +97,8 @@ function WordOfTheDay() {
 
     // Making an API call (request)
     // and getting the response back
-    //const response = await fetch(api_url + word + process.env.REACT_APP_API_KEY);
-    const response = await fetch("/api/getDefinition?word=example")
+    const response = await fetch(api_url + word + process.env.REACT_APP_API_KEY);
+    //const response = await fetch("/api/getDefinition?word=example")
   
 
     // Parsing it to JSON format
