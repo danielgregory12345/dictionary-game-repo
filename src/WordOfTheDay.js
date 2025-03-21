@@ -98,7 +98,7 @@ function WordOfTheDay() {
     // Making an API call (request)
     // and getting the response back
     const response = await fetch(api_url + word + process.env.REACT_APP_API_KEY);
-    //const response = await fetch("/api/getDefinition?word=example")
+    //const response = await fetch("/api/getDefinition?word={word}")
   
 
     // Parsing it to JSON format
